@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+<div class="container custom-container">
+    <h2 align="center" th:text="#{template.all.animals.page}">ALL ANIMALS</h2><hr/>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped" id="allAnimals">
+            <thead>
+            <tr>
+                <th th:text="#{all.animals.species}">Species</th>
+                <th th:text="#{all.animals.name}">Name</th>
+                <th th:text="#{all.animals.locator.id}">Locator ID</th>
+                <th th:text="#{all.animals.owner}">Owner</th>
+                <th th:text="#{all.animals.birthday}">Birthday</th>
+                <th th:text="#{all.animals.breed}">Breed</th>
+                <th th:text="#{all.animals.sex}">Sex</th>
+                <th th:text="#{all.animals.color}">Color</th>
+                <th th:text="#{all.animals.transponder.code}">Transponder code</th>
+                <th th:text="#{all.animals.transponder.location}">Transponder location</th>
+                <th th:text="#{all.animals.passport}">Passport</th>
+                <th th:text="#{all.animals.status}">Status</th>
+                <th th:text="#{all.animals.details}">All details</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="animal : ${allAnimalsList}">
+                <td th:text="${animal.species.name}"></td>
+                <td th:text="${animal.animalName}"></td>
+                <td th:text="${animal.gpsLocator.gpsLocatorId}"></td>
+                <td th:text="${animal.user.username}"></td>
+                <td th:text="${animal.getAnimalBirthdayString()}"></td>
+                <td th:text="${animal.breed.name}"></td>
+                <td th:text="${animal.animalSex.animalSex}"></td>
+                <td th:text="${animal.color.name}"></td>
+                <td th:text="${animal.animalTransponderCode}"></td>
+                <td th:text="${animal.animalTransponderLocation}"></td>
+                <td th:text="${animal.animalPassportCode}"></td>
+                <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=${animal.gpsLocator.status} ? #{tooltip.status.dectivate} : #{tooltip.status.activate}"><a th:href="@{'/all-animals/'+${animal.gpsLocator.gpsLocatorId}+'/'+${animal.gpsLocator.status}}"><span th:classappend="${(animal.gpsLocator.status) ? 'glyphicon glyphicon-ok-circle':'glyphicon glyphicon-remove-circle'}"></span></a></button></td>
+                <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.all.animal.details}"><a th:href="@{'/animal/'+${animal.animalId}}"><span class="glyphicon glyphicon-list-alt"></span></a></button></td>
+               </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<nav th:replace="template :: footer"/>
+</body>
+</html>

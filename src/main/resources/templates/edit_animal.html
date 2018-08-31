@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+<div class="container custom-container">
+    <h2 align="center" th:text="#{template.edit.animal}">EDIT ANIMAL DETAILS</h2><hr/>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 custom-login-form">
+                <form method="POST" th:action="@{'/animal/'+${animal.animalId}+'/edit_data'}" th:object="${editAnimalForm}">
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}">..</p>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.name}" for="name">Name:</label>
+                        <input th:field="*{name}" th:attr="placeholder=#{signup.username.placeholder}" name="name" type="text" class="form-control" id="name" required="required"/>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.birthday}">Birthday:</label>
+                        <div class='input-group date' id="animalBirthdayPicker">
+                            <input th:field="*{birthday}" type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.species}" for="species">Species:</label>
+                        <input list="species" th:value="*{species}" name="species" class="form-control"/>
+                        <datalist id="species">
+                            <option th:each="species : ${speciesList}" th:value="${species.name}" th:text="${species.name}">SPECIES</option>
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.breed}" for="breed">Breed:</label>
+                        <input list="breed" th:value="*{breed}" name="breed" class="form-control"/>
+                        <datalist id="breed">
+                            <option th:each="breed : ${breeds}" th:value="${breed.name}" th:text="${breed.name}">BREED</option>
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.color}" for="color">Color:</label>
+                        <input list="color" th:value="*{color}" name="color" class="form-control"/>
+                        <datalist id="color">
+                            <option th:each="color : ${colors}" th:value="${color.name}" th:text="${color.name}">COLOR</option>
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.sex}">Sex:</label>
+                        <select th:field="*{sex}" class="form-control" id="sex">
+                            <option th:each="type : ${T(com.animal.locator.animalLocator.models.AnimalSex).values()}" th:value="${type}" th:text="${type.animalSex}">TYPE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.transponder.code}" for="transponderCode">Transponder code:</label>
+                        <input th:field="*{transponderCode}" name="transponderCode" type="text" class="form-control" id="transponderCode"/>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.transponder.location}" for="transponderLocation">Transponder location:</label>
+                        <input th:field="*{transponderLocation}" name="transponderLocation" type="text" class="form-control" id="transponderLocation"/>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{all.animals.passport}" for="passport">Passport:</label>
+                        <input th:field="*{passport}" name="passport" type="text" class="form-control" id="passport"/>
+                    </div>
+                    <div class="form-group" align="center">
+                        <button type="submit" class="btn btn-primary" th:text="#{animal.edit.save}" name="action" th:value="save">Save</button>
+                        <button class="btn btn-primary" th:text="#{animal.edit.cancel}" name="action" th:value="cancel"><a th:href="@{'/animal/'+${animal.animalId}}">Cancel</a></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<nav th:replace="template :: footer"/>
+</body>
+</html>

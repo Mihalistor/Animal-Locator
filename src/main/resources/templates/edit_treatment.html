@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+<div class="container custom-container">
+    <h2 align="center" th:text="#{template.edit.animal.treatment}">EDIT ANIMAL TREATMENT</h2><hr/>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 custom-login-form">
+                <form method="POST" th:action="@{'/animal/'+${animal.animalId}+'/edit_treatment/'+${treatmentId}}" th:object="${treatmentForm}">
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}">..</p>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{treatment.type}">Treatment type:</label>
+                        <select th:field="*{treatmentType}" class="form-control" id="treatmentType">
+                            <option th:each="type : ${T(com.animal.locator.animalLocator.models.TreatmentType).values()}" th:value="${type}" th:text="${type.treatmentType}">TYPE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{treatment.date}">Date:</label>
+                        <div class='input-group date' id="treatmentDateTimePicker">
+                            <input th:field="*{dateTime}" type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="treatmentDescription" th:text="#{treatment.description}">Treatment description:</label>
+                        <textarea th:field="*{treatmentDescription}" name="obligationDescription" type="text" rows="5" class="form-control" id="treatmentDescription"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" th:field="*{notification}" class="form-check-input" id="showAlertTime"/>
+                        <label class="form-check-label" for="showAlertTime" th:text="#{treatment.alert.time.show}">Send notification at specific time</label>
+                    </div><br/>
+                    <div class="form-group alert-time">
+                        <label th:text="#{treatment.alert.time}">Alert time:</label>
+                        <div class='input-group date' id="treatmentAlertTimePicker">
+                            <input th:field="*{alertTime}" type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" align="center">
+                        <button type="submit" class="btn btn-primary" th:text="#{animal.edit.save}" name="action" th:value="save">Save</button>
+                        <button class="btn btn-primary" th:text="#{animal.edit.cancel}" name="action" th:value="cancel"><a th:href="@{'/animal/'+${animal.animalId}}">Cancel</a></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<nav th:replace="template :: footer"/>
+</body>
+</html>

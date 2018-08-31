@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+<div class="container custom-container" id="admin-panel">
+    <h2 align="center" th:text="#{template.admin.page}">Admin panel</h2><hr/>
+    <ul class="nav nav-tabs" id="adminNavigation">
+        <li th:classappend="${tab == 1 ? 'active':''}"> <a id="active_users" data-toggle="tab" href="#activeUsers" th:text="#{admin.active.users}">Active users</a></li>
+        <li th:classappend="${tab == 2 ? 'active':''}"> <a id="on_hold_users" data-toggle="tab" href="#onHoldUsers" th:text="#{admin.on.hold.users}">On hold users</a><span th:if="${not #lists.isEmpty(onHoldUsers)}" class="badge custom-badge" th:text="${#lists.size(onHoldUsers)}"></span></li>
+        <li th:classappend="${tab == 3 ? 'active':''}"> <a id="not_active_users" data-toggle="tab" href="#notActiveUsers" th:text="#{admin.not.active.users}">Inactive users</a></li>
+        <li th:classappend="${tab == 4 ? 'active':''}"> <a id="create_animal" data-toggle="tab" href="#createAnimal" th:text="#{admin.create.animal}">Create animal</a></li>
+    </ul>
+
+    <div class="tab-content margins">
+        <div id="activeUsers" class="tab-pane fade in marginBottom" th:classappend="${tab == 1 ? 'active':''}">
+            <br/>
+            <div class="table-responsive">
+                <br/><br/>
+                <table class="table table-hover table-striped adminTables">
+                    <thead>
+                    <tr>
+                        <th th:text="#{user.profile.id}">ID</th>
+                        <th th:text="#{user.profile.first.name}">First name</th>
+                        <th th:text="#{user.profile.last.name}">Last name</th>
+                        <th th:text="#{user.profile.username}">Username</th>
+                        <th th:text="#{user.profile.email}">Email</th>
+                        <th th:text="#{user.profile.phone}">Phone</th>
+                        <th th:text="#{user.profile.delay}">Delay</th>
+                        <th th:text="#{user.profile.status}">Status</th>
+                        <th th:text="#{user.profile.delete}">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${activeUsers}">
+                        <td th:text="${user.userId}"></td>
+                        <td th:text="${user.firstname}"></td>
+                        <td th:text="${user.lastname}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phone}"></td>
+                        <td th:text="${user.delay}"></td>
+                        <td><span data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.status.active}" class="glyphicon glyphicon-ok-circle"></span></td>
+                        <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.remove.user}"><a th:href="@{'/admin/delete-user/'+${user.userId}}"><span class ="glyphicon glyphicon-trash"></span></a></button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="onHoldUsers" class="tab-pane fade in marginBottom" th:classappend="${tab == 2 ? 'active':''}">
+            <br/>
+            <div class="table-responsive">
+                <br/><br/>
+                <table class="table table-hover table-striped adminTables" id="OnHoldUsersTable">
+                    <thead>
+                    <tr>
+                        <th th:text="#{user.profile.id}">ID</th>
+                        <th th:text="#{user.profile.first.name}">First name</th>
+                        <th th:text="#{user.profile.last.name}">Last name</th>
+                        <th th:text="#{user.profile.username}">Username</th>
+                        <th th:text="#{user.profile.email}">Email</th>
+                        <th th:text="#{user.profile.phone}">Phone</th>
+                        <th th:text="#{user.profile.delay}">Delay</th>
+                        <th th:text="#{user.profile.status}">Status</th>
+                        <th th:text="#{user.profile.activate}">Activate user</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${onHoldUsers}">
+                        <td th:text="${user.userId}"></td>
+                        <td th:text="${user.firstname}"></td>
+                        <td th:text="${user.lastname}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phone}"></td>
+                        <td th:text="${user.delay}"></td>
+                        <td><span data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.status.on.hold}" class="glyphicon glyphicon-minus-sign"></span></td>
+                        <td><button data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.status.activate.user}" type="button" class="btn btn-link" ><a th:href="@{'/admin/activate-user/'+${user.userId}}"><span class="glyphicon glyphicon-check"></span></a></button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="notActiveUsers" class="tab-pane fade in marginBottom" th:classappend="${tab == 3 ? 'active':''}">
+            <br/>
+            <div class="table-responsive">
+                <br/><br/>
+                <table class="table table-hover table-striped adminTables" id="notActiveUsersTable">
+                    <thead>
+                    <tr>
+                        <th th:text="#{user.profile.id}">ID</th>
+                        <th th:text="#{user.profile.first.name}">First name</th>
+                        <th th:text="#{user.profile.last.name}">Last name</th>
+                        <th th:text="#{user.profile.username}">Username</th>
+                        <th th:text="#{user.profile.email}">Email</th>
+                        <th th:text="#{user.profile.phone}">Phone</th>
+                        <th th:text="#{user.profile.delay}">Delay</th>
+                        <th th:text="#{user.profile.status}">Status</th>
+                        <th th:text="#{user.profile.restore}">Restore user</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${notActiveUsers}">
+                        <td th:text="${user.userId}"></td>
+                        <td th:text="${user.firstname}"></td>
+                        <td th:text="${user.lastname}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phone}"></td>
+                        <td th:text="${user.delay}"></td>
+                        <td><span data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.status.inactive}" class="glyphicon glyphicon-remove-circle"></span></td>
+                        <td><button data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.status.restore.user}" type="button" class="btn btn-link" ><a th:href="@{'/admin/restore-user/'+${user.userId}}"><span class="glyphicon glyphicon-share"></span></a></button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="createAnimal" class="tab-pane fade in marginBottom" th:classappend="${tab == 4 ? 'active':''}">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 custom-login-form">
+                    <br/><br/>
+                    <form method="POST" th:action="@{'/admin/create-animal'}" th:object="${createAnimalForm}" align="center">
+                        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <p th:each="err : ${#fields.errors('*')}" th:text="${err}">..</p>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{admin.create.animal.user}" for="numberAnimals">Choose user</label>
+                            <select th:field="*{user}" class="form-control" id="users">
+                                <option th:each="users : ${createAnimalForm.userList}" th:value="${users.userId}" th:text="${users.username}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{admin.create.animal.number}" for="numberAnimals">Number of animals with locator to create</label>
+                            <input th:field="*{numberOfAnimals}" name="numberAnimals" type="number" min="1" class="form-control" id="numberAnimals"/>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{admin.create.animal.device}" for="devices">Device ID (if you create multiple devices use ; between ID)</label>
+                            <input th:field="*{devices}" name="devices" type="text" class="form-control" id="devices"/>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{admin.create.animal.token}" for="tokens">Token (if you create multiple tokens use ; between tokens):</label>
+                            <input th:field="*{tokens}" name="devices" type="text" class="form-control" id="tokens"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary" th:text="#{admin.create.animal.save}">Save</button><br/><br/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<nav th:replace="template :: footer"/>
+</body>
+</html>

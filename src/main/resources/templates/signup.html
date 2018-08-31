@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+    <!--<div class="vertical-center">-->
+        <div class="container custom-container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="panel panel-default custom-login-form">
+                        <div class="panel-body" align="center">
+                            <h2 th:text="#{signup.title}">Sign Up</h2>
+                            <hr/>
+                            <form method="POST" th:action="@{/signup}" th:object="${signUpForm}">
+                                <div class="form-group" align="left">
+                                    <label th:text="#{signup.firstname}" for="firstname">First name:</label>
+                                    <input th:field="*{firstname}" th:attr="placeholder=#{signup.firstname}" name="firstname" type="text" class="form-control" id="firstname"/>
+                                </div>
+                                <div class="form-group" align="left">
+                                    <label th:text="#{signup.lastname}" for="username">Last name:</label>
+                                    <input th:field="*{lastname}" th:attr="placeholder=#{signup.lastname}" name="lastname" type="text" class="form-control" id="lastname"/>
+                                </div>
+                                <div class="form-group" align="left">
+                                    <label th:text="#{signup.username.label}" for="username">Username:</label>
+                                    <input th:field="*{username}" th:attr="placeholder=#{signup.username.placeholder}" name="username" type="text" class="form-control" id="username" required="required"/>
+                                </div>
+                                <div class="form-group" align="left">
+                                    <label th:text="#{signup.email}" for="email">Email:</label>
+                                    <input th:field="*{email}" th:attr="placeholder=#{signup.email.placeholder}" name="email" type="email" class="form-control" id="email" required="required"/>
+                                </div>
+                                <div class="form-group" align="left">
+                                    <label th:text="#{signup.phone}" for="phone">Phone:</label>
+                                    <input th:field="*{phone}" th:attr="placeholder=#{signup.phone.placeholder}" name="phone" type="text" class="form-control" id="phone"/>
+                                </div>
+                                <div class="form-group" align="left">
+                                    <label th:text="#{signup.password.label}" for="password">Password:</label>
+                                    <input th:field="*{password}" th:attr="placeholder=#{signup.password.placeholder}" name="password" type="password" class="form-control" id="password" required="required"/>
+                                </div>
+                                <div class="form-group" align="left">
+                                    <label th:text="#{signup.rpassword.label}" for="confirm_password">Confirm password:</label>
+                                    <input th:field="*{confirmPassword}" th:attr="placeholder=#{signup.rpassword.placeholder}" name="confirm_password" type="password" class="form-control" id="confirm_password" required="required"/>
+                                </div>
+                                <button th:text="#{signup.button}" type="submit" class="btn btn-primary btn-block">Sign up</button>
+                                <br/>
+                                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissable">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <p th:each="err : ${#fields.errors('*')}" th:text="${err}">..</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--</div>-->
+<nav th:replace="template :: footer"/>
+</body>
+</html>

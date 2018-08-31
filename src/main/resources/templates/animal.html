@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+<div class="container custom-container">
+    <h2 align="center" th:text="#{template.animal}">ANIMAL</h2><hr/>
+
+    <ul class="nav nav-tabs" id="animalNavigation">
+        <li th:classappend="${tab == 1 ? 'active':''}"> <a id="basic_information" data-toggle="tab" href="#basicInformation" th:text="#{animal.basic.information}">Basic information</a></li>
+        <li th:classappend="${tab == 2 ? 'active':''}"> <a id="safe_zone" data-toggle="tab" href="#safeZone" th:text="#{animal.safe.zone}">Safe zone</a></li>
+        <li th:classappend="${tab == 3 ? 'active':''}"> <a id="treatments" data-toggle="tab" href="#animalTreatments" th:text="#{animal.treatments}">Treatments</a></li>
+        <li th:classappend="${tab == 4 ? 'active':''}"> <a id="statistics" data-toggle="tab" href="#animalStatistics" th:text="#{animal.statistics}">Statistics</a></li>
+    </ul>
+
+    <div class="tab-content margins">
+        <div id="basicInformation" class="tab-pane fade in marginBottom" th:classappend="${tab == 1 ? 'active':''}">
+            <div class="col-md-6"><br/>
+                <div class="table-responsive">
+                <table class="table table-striped">
+                    <tr>
+                        <td><b><span th:text="#{all.animals.name}">Name</span></b></td>
+                        <td th:text="${animal.animalName}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.birthday}">Birthday</span></b></td>
+                        <td th:text="${animal.getAnimalBirthdayString()}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.species}">Species</span></b></td>
+                        <td th:text="${animal.species.name}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.breed}">Breed</span></b></td>
+                        <td th:text="${animal.breed.name}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.color}">Color</span></b></td>
+                        <td th:text="${animal.color.name}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.sex}">Sex</span></b></td>
+                        <td th:text="${animal.animalSex.animalSex}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.transponder.code}">Transponder code</span></b></td>
+                        <td th:text="${animal.animalTransponderCode}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.transponder.location}">Transponder location</span></b></td>
+                        <td th:text="${animal.animalTransponderLocation}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.passport}">Passport</span></b></td>
+                        <td th:text="${animal.animalPassportCode}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.locator.id}">Locator ID</span></b></td>
+                        <td th:text="${animal.gpsLocator.gpsLocatorId}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{all.animals.status}">Status</span></b></td>
+                        <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=${animal.gpsLocator.status} ? #{tooltip.status.dectivate} : #{tooltip.status.activate}"><a th:href="@{'/animal/'+${animal.gpsLocator.gpsLocatorId}+'/'+${animal.gpsLocator.status}}"><span th:classappend="${(animal.gpsLocator.status) ? 'glyphicon glyphicon-ok-circle':'glyphicon glyphicon-remove-circle'}"></span></a></button></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{animal.edit}">Edit</span></b></td>
+                        <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.animal.edit}"><a th:href="@{'/edit_animal/'+${animal.animalId}}"><span class="glyphicon glyphicon-edit"></span></a></button></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="${animal.gpsLocator.led} ? #{animal.led.light.off} : #{animal.led.light.on}">Turn LED light ON/OFF</span></b></td>
+                        <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=${animal.gpsLocator.led} ? #{animal.led.light.off} : #{animal.led.light.on}"><a th:href="@{'/animal/'+${animal.animalId} +'/led'}"><span th:classappend="${(animal.gpsLocator.led) ? 'glyphicon glyphicon-certificate light':'glyphicon glyphicon-certificate'}"></span></a></button></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{statistic.resting}">Resting today</span></b></td>
+                        <td th:text="${statistic.getSleepingHours()}"></td>
+                    </tr>
+                    <tr>
+                        <td><b><span th:text="#{statistic.moving}">Moving today</span></b></td>
+                        <td th:text="${statistic.getRunningHours()}"></td>
+                    </tr>
+                </table>
+                <br/>
+            </div>
+            </div>
+            <div class="col-md-6"><br/>
+                <div id="basicInfoMap"></div>
+            </div>
+        </div>
+        <div id="safeZone" class="tab-pane fade in marginBottom" th:classappend="${tab == 2 ? 'active':''}">
+            <div class="col-md-8 col-sm-12"><br/>
+                <div id="safeZoneMap"></div>
+                <script th:src="@{/js/googleMaps.js}"></script>
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCfTn9pXaeQ0gwF5TSAPuTvkgBDsqxYLk&amp;callback=initAnimalMaps&amp;libraries=drawing" async="async" defer="defer"></script>
+            </div>
+            <div class="col-md-4 col-sm-12 custom-login-form" align="center">
+                <h3 th:text="#{safe.zone.edit}">Edit animal safe zone</h3>
+                <form class="custom-form" method="POST" th:action="@{'/animal/'+${animal.animalId}+'/save_safe_zone'}" th:object="${safeZoneMapForm}">
+                    <input th:field="*{safeZoneElements}" type="text" id="vertices" hidden="hidden"/>
+                    <input th:field="*{check}" type="text" id="check" hidden="hidden"/>
+                    <button type="submit" class="btn btn-primary custom-button" id="saveNewSafeZone" th:text="#{safe.zone.set}">Save zone</button><br/><br/>
+                    <button type="button" class="btn btn-primary custom-button" id="editSafeZone" onClick="initNewSafeZoneMap()" th:text="#{safe.zone.create}">Create new zone</button><br/><br/>
+                    <button type="button" class="btn btn-primary custom-button" id="removeSafeZone" onClick="initNewSafeZoneMap()" th:text="#{safe.zone.remove}">Remove zone</button><br/><br/>
+                    <div class="form-check animal-list-zone-checkbox">
+                        <input type="checkbox" th:field="*{anotherAnimal}" class="form-check-input" id="anotherAnimalCheck"/>
+                        <label for="anotherAnimalCheck" th:text="#{safe.zone.from.animal}">Choose safe zone from another animal:</label>
+                    </div><br/>
+                    <div class="form-group animal-list-zone-select" align="center">
+                        <select th:field="*{animalZone}" class="form-control" id="sender">
+                            <option th:each="animals : ${safeZoneMapForm.animalsZone}" th:value="${animals.animalId}" th:text="${animals.animalName}"></option>
+                        </select>
+                    </div>
+                </form>
+                <br/><br/>
+                <p th:text="#{safe.zone.help.text}"></p>
+            </div>
+        </div>
+        <div id="animalTreatments" class="tab-pane fade in marginBottom" th:classappend="${tab == 3 ? 'active':''}">
+            <div class="col-md-7 col-sm-12">
+                <h3 th:text="#{treatment.all.treatments}" align="center">All treatments</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped" id="animalTreatmentsTable">
+                        <thead>
+                        <tr>
+                            <th th:text="#{treatment.date}">Date</th>
+                            <th th:text="#{treatment.type}">Treatment type</th>
+                            <th th:text="#{treatment.description}">Description</th>
+                            <th th:text="#{treatment.alert.time}">Alert time</th>
+                            <th th:text="#{treatment.edit.button}">Edit</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="treatment : ${treatmentsList}">
+                            <td th:text="${treatment.getTreatmentDateString()}"></td>
+                            <td th:text="${treatment.treatmentType.treatmentType}"></td>
+                            <td th:text="${treatment.treatmentDescription != ''} ? ${treatment.treatmentDescription}: '-'"></td>
+                            <td th:text="${treatment.treatmentAlertTime} ? ${treatment.getTreatmentAlertTimeString()}: '-'"></td>
+                            <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.treatment.edit}" ><a th:href="@{'/edit_treatment/'+${treatment.treatmentId}}"><span class="glyphicon glyphicon-edit"></span></a></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <form align="center" class="custom-login-form" method="POST" th:action="@{'/animal/'+${animal.animalId}+'/download_treatment'}">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" th:text="#{animal.treatment.download.treatment}">Download treatments in PDF</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-1 col-sm-12">
+                <h3 th:text="#{treatment.create.treatment}" align="center">Create animal treatment</h3>
+                <form class="custom-login-form" method="POST" th:action="@{'/animal/'+${animal.animalId}+'/new_treatment'}" th:object="${newTreatmentForm}">
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}">..</p>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{treatment.type}">Treatment type:</label>
+                        <select th:field="*{treatmentType}" class="form-control" id="treatmentType">
+                            <option th:each="type : ${T(com.animal.locator.animalLocator.models.TreatmentType).values()}" th:value="${type}" th:text="${type.treatmentType}">TYPE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{treatment.date}">Date:</label>
+                        <div class='input-group date' id="treatmentDateTimePicker">
+                            <input th:field="*{dateTime}" type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="treatmentDescription" th:text="#{treatment.description}">Treatment description:</label>
+                        <textarea th:field="*{treatmentDescription}" name="obligationDescription" type="text" rows="5" class="form-control" id="treatmentDescription"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" th:field="*{notification}" class="form-check-input" id="showAlertTime"/>
+                        <label class="form-check-label" for="showAlertTime" th:text="#{treatment.alert.time.show}">Send notification at specific time</label>
+                    </div><br/>
+                    <div class="form-group alert-time">
+                        <label th:text="#{treatment.alert.time}">Alert time:</label>
+                        <div class='input-group date' id="treatmentAlertTimePicker">
+                            <input th:field="*{alertTime}" type='text' class="form-control"/>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" align="center">
+                        <button type="submit" class="btn btn-primary" th:text="#{animal.treatment.new.treatment}">Create new treatment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="animalStatistics" class="tab-pane fade in marginBottom" th:classappend="${tab == 4 ? 'active':''}">
+            <div align="center">
+                <form class="custom-login-form" method="POST" th:action="@{'/animal/'+${animal.animalId}+'/download_statistic'}">
+                        <button type="submit" class="btn btn-primary margin0" th:text="#{animal.download.statistics}">Download statistics in PDF</button>
+                </form>
+            </div>
+            <div class="charts">
+                <div class="col-md-6" align="center">
+                    <h3 th:text="#{statistic.resting.moving}">Resting and moving today</h3>
+                    <div id="piechart"></div>
+                </div>
+                <div class="col-md-6" align="center">
+                    <h3 th:text="#{statistic.resting.moving.days}">Resting and moving for last 5 days</h3>
+                    <div id="piechart2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<nav th:replace="template :: footer"/>
+</body>
+</html>

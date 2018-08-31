@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+    <div class="container">
+        <h2 align="center" th:text="#{template.user.profile}">USER PROFILE</h2><hr/>
+        <div class="col-md-4 col-md-offset-4 custom-login-form">
+            <form method="POST" th:action="@{'/user_profile_edit'}" th:object="${userForm}">
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissable">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <p th:each="err : ${#fields.errors('*')}" th:text="${err}">..</p>
+                </div>
+                <div th:if="${success}" class="alert alert-success alert-dismissable" id="success-profile-editing">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <p th:text="#{user.profile.success}">Successful profile editing</p>
+                </div>
+                <div class="form-group">
+                    <label th:text="#{user.profile.first.name}" for="firstname">First name</label>
+                    <input th:field="*{firstname}" name="firstname" type="text" class="form-control" id="firstname"/>
+                </div>
+                <div class="form-group">
+                    <label th:text="#{user.profile.last.name}" for="lastname">Last name</label>
+                    <input th:field="*{lastname}" name="lastname" type="text" class="form-control" id="lastname"/>
+                </div>
+                <div class="form-group">
+                    <label th:text="#{user.profile.username}" for="username">Username</label>
+                    <input th:field="*{username}" name="username" type="text" class="form-control" id="username"/>
+                </div>
+                <div class="form-group">
+                    <label th:text="#{user.profile.email}" for="email">Email</label>
+                    <input th:field="*{email}" name="email" type="email" class="form-control" id="email"/>
+                </div>
+                <div class="form-group">
+                    <label th:text="#{user.profile.phone}" for="phone">Phone</label>
+                    <input th:field="*{phone}" name="phone" type="text" class="form-control" id="phone"/>
+                </div>
+                <div class="form-group">
+                    <label th:text="#{user.profile.delay}" for="delay">Delay</label>
+                    <input th:field="*{delay}" name="delay" type="number" min="5" class="form-control" id="delay"/>
+                </div>
+                <div class="form-check">
+                    <label th:text="#{user.profile.notification}">Notification</label><br/>
+                    <span class="user-profile-notification-checkbox">&nbsp;</span>
+                    <input type="checkbox" th:field="*{emailNotification}" class="form-check-input" id="emailNotification"/>
+                    <label class="form-check-label" for="emailNotification" th:text="#{user.profile.email}">Email</label> <br/>
+                    <span class="user-profile-notification-checkbox">&nbsp;</span>
+                    <input type="checkbox" th:field="*{SMSNotification}" class="form-check-input" id="SMSNotification"/>
+                    <label class="form-check-label" for="SMSNotification" th:text="#{user.profile.sms}">SMS</label><br/>
+                    <span class="user-profile-notification-checkbox">&nbsp;</span>
+                    <input type="checkbox" th:field="*{mobileNotification}" class="form-check-input" id="MobileNotification"/>
+                    <label class="form-check-label" for="MobileNotification" th:text="#{user.profile.mobile}">Mobile notification (only for safe zone)</label><br/>
+                </div><br/>
+                <div class="form-check">
+                    <input type="checkbox" th:field="*{deleteData}" class="form-check-input" id="deleteData"/>
+                    <label th:text="#{user.profile.delete.gps.data}">Delete GPS data after 30 days?</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" th:field="*{changePassword}" class="form-check-input" id="changePassword"/>
+                    <label th:text="#{user.profile.change.password}">Change password</label>
+                </div><br/>
+                <div class="password_change">
+                    <div class="form-group">
+                        <label th:text="#{user.profile.password}" for="password">Password</label>
+                        <input th:field="*{password}" name="password" type="password" class="form-control" id="password"/>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{user.profile.confirm.password}" for="cpassword">First name</label>
+                        <input th:field="*{cpassword}" name="cpassword" type="password" class="form-control" id="cpassword"/>
+                    </div>
+                </div>
+                <div class="form-group" align="center">
+                    <button type="submit" class="btn btn-primary" th:text="#{animal.edit.save}" id="saveUserData">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<nav th:replace="template :: footer"/>
+</html>

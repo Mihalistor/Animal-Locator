@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--<meta http-equiv="refresh" content="5" />-->
+<head th:replace="template :: head">
+</head>
+<body>
+<nav th:replace="template :: navbar"/>
+<div class="container custom-container">
+    <h2 align="center" th:text="#{template.home.page}">HOME</h2><hr/>
+    <div class="col-md-7">
+        <div id="homeMap"></div>
+        <script th:src="@{/js/googleMaps.js}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCfTn9pXaeQ0gwF5TSAPuTvkgBDsqxYLk&amp;callback=initHomeMap" async="async" defer="defer"></script>
+    </div><br/><br/>
+    <div class="col-md-5 table-responsive">
+        <table class="table table-hover table-striped" id="homeAllAnimals">
+            <thead>
+            <tr>
+                <th th:text="#{all.animals.image}">Image</th>
+                <th th:text="#{all.animals.name}">Name</th>
+                <th th:text="#{all.animals.species}">Spacies</th>
+                <th th:text="#{all.animals.birthday}">Birthday</th>
+                <th th:text="#{all.animals.status}">Status</th>
+                <th th:text="#{all.animals.show.map}">Show on map</th>
+                <th th:text="#{all.animals.details}">Show details</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="animal : ${animalsList}">
+                <td><img th:src="${animal.avatar}"/></td>
+                <td th:text="${animal.animalName}"></td>
+                <td th:text="${animal.species.name}"></td>
+                <td th:text="${animal.getAnimalBirthdayString()}"></td>
+                <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=${animal.gpsLocator.status} ? #{tooltip.status.dectivate} : #{tooltip.status.activate}"><a th:href="@{'/home/'+${animal.gpsLocator.gpsLocatorId}+'/'+${animal.gpsLocator.status}}"><span th:classappend="${(animal.gpsLocator.status)? 'glyphicon glyphicon-ok-circle':'glyphicon glyphicon-remove-circle'}"></span></a></button></td>
+                <td><button type="button" class="btn btn-link" data-toggle="tooltip" data-placement="bottom" th:attr="title=#{tooltip.show.on.map}" th:onclick="'javascript:showOnMap(' + ${animal.animalId} + ')'"><span class="glyphicon glyphicon-globe"></span></button></td>
+                <td><button type="button" class="btn btn-link" data-placement="bottom" data-toggle="modal" data-target="#animalDetailsModal" th:attr="data-avatar=${animal.avatar},data-id=${animal.animalId},data-birthday=${animal.getAnimalBirthdayString()},data-breed=${animal.breed.name},data-color=${animal.color.name},data-name=${animal.animalName},data-passport=${animal.animalPassportCode},data-sex=${animal.animalSex.animalSex}, data-species=${animal.species.name},data-transponder=${animal.animalTransponderCode},data-transponder-location=${animal.animalTransponderLocation},data-gpslocator=${animal.gpsLocator.gpsLocatorId}"><span class="glyphicon glyphicon-info-sign"></span></button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <br/>
+<div class="modal fade" id="animalDetailsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form class="custom-login-form custom-modal-form">
+                    <h2 align="center" th:text="#{home.animal.details}">Animal details</h2><hr/>
+                    <div class="form-group" align="center">
+                        <img id="animal-avatar" src=""/>
+                        <!--<input type="text" class="form-control" id="animal-avatar" readonly="readonly"/>-->
+                    </div>
+                    <div class="form-group height-60">
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.name}" for="animal-name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="animal-name" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.species}" for="animal-species" class="col-form-label">Species:</label>
+                            <input type="text" class="form-control" id="animal-species" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="form-group height-60">
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.breed}" for="animal-breed" class="col-form-label">Breed:</label>
+                            <input type="text" class="form-control" id="animal-breed" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.color}" for="animal-color" class="col-form-label">Color:</label>
+                            <input type="text" class="form-control" id="animal-color" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="form-group height-60">
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.birthday}" for="animal-birthday" class="col-form-label">Birthday:</label>
+                            <input type="text" class="form-control" id="animal-birthday" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.sex}" for="animal-sex" class="col-form-label">Sex:</label>
+                            <input type="text" class="form-control" id="animal-sex" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="form-group height-60">
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.transponder.code}" for="animal-transponder" class="col-form-label">Transponder code:</label>
+                            <input type="text" class="form-control" id="animal-transponder" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.transponder.location}" for="animal-transponder-location" class="col-form-label">Transponder location:</label>
+                            <input type="text" class="form-control" id="animal-transponder-location" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="form-group height-60">
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.passport}" for="animal-passport" class="col-form-label">Passport:</label>
+                            <input type="text" class="form-control" id="animal-passport" readonly="readonly"/>
+                        </div>
+                        <div class="col-md-6 mobile-margin" align="left">
+                            <label th:text="#{all.animals.locator.id}" for="animal-gpslocator" class="col-form-label">Locator ID:</label>
+                            <input type="text" class="form-control" id="animal-gpslocator" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="form-group height-60">
+                        <div class="col-md-6 col-md-offset-6" align="right">
+                            <button th:text="#{home.button.close}" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<nav th:replace="template :: footer"/>
+</body>
+</html>
